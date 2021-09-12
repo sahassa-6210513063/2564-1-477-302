@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz2-6210513063</title>
+    <link rel="stylesheet" href="style.css">
+    
+</head>
+<body onload="chkUsername()">
+    
+   <div class="register-wrapper">
+       <div class="register-left">
+           <img src="https://i.pinimg.com/564x/01/32/67/013267ccdd2995c0b063732bc17bc00e.jpg" alt="">
+           <div class="h1">CLICK TO REGISTER</div>
+       </div>
+
+       <div class="register-right">
+           <div class="h2">register</div>
+
+           <!-- localStorage -->
+           Username :  <div id="div1"><input type="username" id="username" placeholder="Enter your username"></div>
+           Password : <div id="div2"><input type="password" id="password" placeholder="Enter your password"></div>
+        
+        <br>
+           <center>
+                  <button onclick="saveUsername()" type="button">Save</button>
+                  <button onclick="delUsername()" type="button">Delete</button>
+           </center>
+        
+
+        <div id="result"></div>
+
+
+           <script>
+            function chkUsername() {
+                if(typeof(Storage) !== "undefined") {
+                    if (localStorage.username) {
+                        document.getElementById("div1").innerHTML = localStorage.username;
+                    } else {
+                        document.getElementById("div1").innerHTML = "<input type='text' placeholder='Enter your username' id='username'>";
+                    }
+                } else {
+                    document.getElementById("result").innerHTML = "Sorry, your browser does not support web storage...";
+                }
+            }
+            function saveUsername() {
+                uname = document.getElementById("username");
+                localStorage.username = uname.value;
+                chkUsername();
+            }
+            function delUsername() {
+                localStorage.removeItem("username");
+                chkUsername();
+            }
+            </script>
+            
+
+      <!-- แผนที่และpopup -->
+<center>
+            <br>
+        <dialog id="myFirstDialog">
+            <p id="demo">Your position</p>
+            <button onclick="getLocation()">locate</button>
+            <div id="mapholder"></div>
+            <form>
+                <input type="submit" value="finish" class="btn btn-secondary">
+            </form>
+
+            <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoKoNVKdXRrp8YDgara5W1m2nfTU1dG5g&callback=initMap"
+            type="text/javascript">
+            </script>
+         
+            <script>
+            var x = document.getElementById("demo");
+            function getLocation() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(showPosition, showError);
+                } else {
+                    x.innerHTML = "Geolocation is not supported by this browser.";
+                }
+            }
+            
+            function showPosition(position) {
+                lat = position.coords.latitude;
+                lon = position.coords.longitude;
+                latlon = new google.maps.LatLng(lat, lon)
+                mapholder = document.getElementById('mapholder')
+                mapholder.style.height = '350px';
+                mapholder.style.width = '500px';
+
+                var myOptions = {
+                    center: latlon,
+                    zoom:16,
+                    mapTypeId:google.maps.MapTypeId.ROADMAP,
+                    mapTypeControl:false,
+                    navigationControlOptions:{style:google.maps.NavigationControlStyle.SMALL}
+                }
+
+                var map = new google.maps.Map(document.getElementById("mapholder"), myOptions);
+                var marker = new google.maps.Marker({position:latlon, map:map, title:"You are here!"});
+            }
+
+            function showError(error) {
+                switch(error.code) {
+                    case error.PERMISSION_DENIED:
+                        x.innerHTML = "User denied the request for Geolocation."
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        x.innerHTML = "Location information is unavailable."
+                        break;
+                    case error.TIMEOUT:
+                        x.innerHTML = "The request to get user location timed out."
+                        break;
+                    case error.UNKNOWN_ERROR:
+                        x.innerHTML = "An unknown error occurred."
+                        break;
+                    }
+                }
+            </script>
+
+            <script>
+                (function () {
+                    var dialog = document.getElementById('myFirstDialog');
+                    document.getElementById('show').onclick = function() {
+                        dialog.showModal();
+                    };
+                    document.getElementById('hide').onclick = function() {
+                        dialog.close();
+                    };
+                    document.getElementById('reveal').onclick = function() {
+                        dialog.showModal();
+                    };
+                })();
+            </script>
+       </div>
+   </div>
+ </center>
+    
+    <script src="script.js"></script>
+</body>
+</html>
